@@ -1,0 +1,15 @@
+
+<div class="clothes-container">
+    <div class="clothe" *ngFor="let clothe of clothes">
+        <div class="clothe-like">
+            <app-likebutton></app-likebutton>
+        </div>
+        <div class="rerouter" [routerLink]="['/clothes-shop', clothe.id]">
+            <img class="clothe-img" [src]="clothe.image">
+            <div class="clothe-detail">
+                <h6>{{ clothe.title }}</h6>
+                <p>{{ clothe.price | currency:'€':'symbol':'1.2-2':'fr' }}</p>
+            </div>
+    </div>
+    </div>
+</div>

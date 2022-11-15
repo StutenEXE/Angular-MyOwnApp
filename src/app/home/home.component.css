@@ -1,0 +1,13 @@
+.card {
+    margin-top: 25px;
+}
+
+.card-img-bottom {
+    height: 256px;
+    width: 256px;
+    transition: 3s;
+}
+
+.card-img-bottom:hover {
+    filter: hue-rotate(720deg);
+}

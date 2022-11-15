@@ -1,0 +1,43 @@
+.card {
+    margin-top: 20px;
+}
+
+.card-body {
+    gap: 20px;
+    display: flex;
+    flex-direction: row;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.card-img-left {
+    width: 30%;
+    height: 30%;
+    border-radius: 15px;
+}
+
+.bg-darkgray {
+    background-color: rgb(153, 153, 153);
+    border: 1px solid #808080;
+}
+
+#Rating {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+}
+
+#Rating > div {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+}
+
+.ratingCrop {
+    overflow: hidden;
+}

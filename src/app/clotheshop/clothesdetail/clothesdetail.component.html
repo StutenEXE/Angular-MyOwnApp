@@ -1,0 +1,53 @@
+<div class="card text-dark bg-darkgray mb-3">
+    <div class="card-header">
+        <h3>
+            {{  
+                clothing==undefined ? 
+                "Product doesn't exist":
+                clothing.title 
+            }}
+        </h3>
+    </div>
+    <div class="card-body">
+        <img class="card-img-left" [src]="clothing?.image" [alt]="clothing?.title">
+        <div>
+            <ul class="list-group">
+                <li class="list-group-item text-dark bg-darkgray mb-1">
+                    <h5>Description</h5>
+                    <p class="card-text">{{ clothing?.description }}</p>
+                </li>
+                <li class="list-group-item text-dark bg-darkgray mb-1">
+                    <h5>Price : {{ clothing?.price | currency:'€':'symbol':'1.2-2':'fr' }}</h5>
+                </li>
+                <li class="list-group-item text-dark bg-darkgray mb-1">
+                    <h5>Category</h5>
+                    <p class="card-text">{{ clothing?.category | uppercase }}</p>
+                </li>
+                <li id="Rating" class="list-group-item text-dark bg-darkgray mb-1">
+                    <h5>Rating :</h5>
+                    <div *ngIf="ratingCropWidth != undefined">
+                        <div class="ratingCrop" 
+                            [style.width.px]="ratingCropWidth">
+                            <div style="width: 75px">
+                                <span class="fa fa-star"></span>
+                                <span class="fa fa-star"></span>
+                                <span class="fa fa-star"></span>
+                                <span class="fa fa-star"></span>
+                                <span class="fa fa-star"></span>
+                            </div>
+                        </div>
+                        <h5 style="font-weight: lighter;">({{ clothing?.rating?.count }})</h5>
+                    </div>
+                </li>
+              </ul>
+        </div>
+    </div>
+    <div class="card-footer">
+        <button class="btn btn-outline-light"
+                style="width:80px"
+                (click)="goBack()">
+            <i class="fa fa-chevron-left"></i> Back
+        </button>
+        <app-likebutton></app-likebutton>
+    </div>
+</div>

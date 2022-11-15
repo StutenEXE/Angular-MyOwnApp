@@ -1,0 +1,57 @@
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.like-btn {
+    fill: transparent;
+    stroke: #ff2581;
+    stroke-width: 20;
+    cursor: pointer;
+    position: relative;
+
+    border: none;
+    background-color: transparent;
+    margin: 2px;
+}
+
+.like-btn svg {
+    overflow: visible;
+    width: 2rem;
+}
+
+.like-btn path {
+    stroke-dashoffset: 0;
+    stroke-dasharray: 1550;
+    transform-origin: center;
+}
+
+.heart-background {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    stroke: none;
+}
+
+.heart-main:hover path:not(.isliked) {
+    animation: stroke-animation 2s ease-in-out forwards;
+}
+
+
+@keyframes stroke-animation {
+    0% {
+        stroke-dashoffset: 0;
+    }
+    30% {
+      stroke-dashoffset: 1550;
+    }
+    60% {
+      stroke-dashoffset: 3100;
+    }
+    100% {
+      stroke-dashoffset: 3100;
+    }
+}

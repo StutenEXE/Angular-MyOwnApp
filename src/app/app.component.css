@@ -1,0 +1,38 @@
+/*** Navbar General ***/
+nav {
+    font-size: large;
+}
+
+/*** Navbar logo ***/
+.navbar-brand {
+    padding-right: 10px;
+    border-right: 2px solid rgb(235, 235, 235);
+    transition: 300ms ease-in-out;
+}
+
+#CapgLogo {
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+    transition: 300ms;
+}
+
+.navbar-brand:hover {
+    color: #12ABDB;
+}
+
+/*** Navbar pills ***/
+.nav-link {
+    cursor: pointer;
+    color: #FFFFFF;
+    background-color: #0070AD;
+    transition: 300ms ease-in-out;
+}
+
+.nav-link:hover {
+    background-color: #12ABDB;
+}
+
+.nav-space-10px {
+    gap: 10px;
+}
