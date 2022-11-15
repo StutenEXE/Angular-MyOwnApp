@@ -9,4 +9,4 @@ Run `npm start` for a dev server. Navigate to `http://localhost:4200/`. The appl
 
 ## The point of it all
 
-This project is here for me to learn to use Angular through TypeScript 
+This project has been created for me to learn Angular with TypeScript. 
