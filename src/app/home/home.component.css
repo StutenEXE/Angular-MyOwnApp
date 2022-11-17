@@ -5,9 +5,27 @@
 .card-img-bottom {
     height: 256px;
     width: 256px;
-    transition: 3s;
 }
 
 .card-img-bottom:hover {
-    filter: hue-rotate(720deg);
+    animation-duration: 1s;
+    animation-name: double-pop;
+}
+@keyframes double-pop {
+    25% {
+        width: 280px;
+        height: 280px;
+    }
+    50% {
+        width: 256px;
+        height: 256px;
+    }
+    75% {
+        width: 280px;
+        height: 280px;
+    }
+    100% {
+        width: 256px;
+        height: 256px;
+    }
 }
