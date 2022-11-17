@@ -3,24 +3,19 @@
 }
 
 .card-img-bottom {
+    cursor: pointer;
     height: 256px;
     width: 256px;
 }
 
 .card-img-bottom:hover {
-    animation-duration: 1s;
-    animation-name: double-pop;
+    animation-duration: 500ms;
+    animation-iteration-count: infinite;
+    animation-name: pop;
 }
-@keyframes double-pop {
-    25% {
-        width: 280px;
-        height: 280px;
-    }
+
+@keyframes pop {
     50% {
-        width: 256px;
-        height: 256px;
-    }
-    75% {
         width: 280px;
         height: 280px;
     }
