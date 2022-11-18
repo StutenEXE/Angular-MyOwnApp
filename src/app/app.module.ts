@@ -9,11 +9,13 @@ import { HomeComponent } from './home/home.component';
 import { ClotheShopComponent } from './clotheshop/clotheshop.component';
 import { LikebuttonComponent } from './shared/likebutton/likebutton.component';
 import { ClotheshopModule } from './clotheshop/clotheshop.module';
+import { OilmapComponent } from './oilmap/oilmap.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    OilmapComponent
   ],
   imports: [
     BrowserModule,
