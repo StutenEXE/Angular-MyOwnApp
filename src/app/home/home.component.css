@@ -9,17 +9,17 @@
 }
 
 .card-img-bottom:hover {
-    animation-duration: 500ms;
+    animation-duration: 1s;
     animation-iteration-count: infinite;
     animation-name: pop;
 }
 
 @keyframes pop {
-    50% {
+    25% {
         width: 280px;
         height: 280px;
     }
-    100% {
+    50% {
         width: 256px;
         height: 256px;
     }
