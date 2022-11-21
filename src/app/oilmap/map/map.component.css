@@ -1,0 +1,51 @@
+.container {
+    margin: 0px;
+}
+
+.map-container {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 90vh;
+    width: 80vw;
+  }
+  
+  .map-frame {
+    /* border: 2px solid; */
+    height: 100%;
+  }
+  
+  #map {
+    height: 100%;
+  }
+
+  #Toolbar {
+    max-width: 125px;
+    z-index: 10000;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    margin: 10px;
+    gap: 5px;
+    background-color: rgba(212,212,212,0.8);
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #Toolbar * {
+    width: 100%;
+    min-height: 34px;
+    background-color: white;
+    border:2px solid black;
+    padding: 2px;
+    cursor: pointer;
+    transition: 200ms;
+  }
+
+  #Toolbar *:hover {
+    background-color: black;
+    color: white;
+  }
