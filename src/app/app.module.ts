@@ -7,16 +7,17 @@ import { HomeComponent } from './home/home.component';
 import { ClotheShopComponent } from './clotheshop/clotheshop.component';
 import { ClotheshopModule } from './clotheshop/clotheshop.module';
 import { OilmapComponent } from './oilmap/oilmap.component';
+import { OilmapModule } from './oilmap/oilmap.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    OilmapComponent
   ],
   imports: [
     BrowserModule,
     ClotheshopModule,
+    OilmapModule,
     RouterModule.forRoot([
       { path: "home", component: HomeComponent },
       { path: "clothes-shop", component: ClotheShopComponent },
