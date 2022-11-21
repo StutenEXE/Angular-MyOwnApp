@@ -159,11 +159,13 @@ export class MapComponent implements AfterViewInit {
             fillOpacity: 1
           }).addTo(this.map).bindPopup("Your position");
           this.hideDepartements();
+          this.hideAllCantons()
         },
         (err) => console.log("User denied access to geolocation"));
     }
     else {
       this.hideDepartements();
+      this.hideAllCantons();
       this.map.setView(this.userMarker.getLatLng(), 18);
     }
   }
