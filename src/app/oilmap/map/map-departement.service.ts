@@ -8,11 +8,11 @@ import { IMapDepartements } from "./map-departement.interface";
 })
 export class MapDepartementsService {
     // ./api/departements.geojson
-    private regionsUrl = "https://france-geojson.gregoiredavid.fr/repo/departements.geojson";
+    private departementsUrl = "https://france-geojson.gregoiredavid.fr/repo/departements.geojson";
 
     constructor(private http : HttpClient) {}
-    getRegions() : Observable<IMapDepartements> {
-        return this.http.get<IMapDepartements>(this.regionsUrl).pipe(
+    getDepartement() : Observable<IMapDepartements> {
+        return this.http.get<IMapDepartements>(this.departementsUrl).pipe(
             catchError(this.handleError)
         );
     }

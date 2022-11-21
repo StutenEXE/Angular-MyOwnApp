@@ -2,6 +2,8 @@ import { Component, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
 import { MapDepartementsService } from './map-departement.service';
 import { IMapDepartements } from './map-departement.interface';
+import { MapCantonsService } from './map-cantons.service';
+import { IMapCantons } from './map-cantons.interface';
 
 const DEPARTEMENT_DEFAULT_COLOR = "#0000FF";
 const DEPARTEMENT_HOVER_COLOR = "#FF0000";
@@ -17,10 +19,12 @@ export class MapComponent implements AfterViewInit {
   private CENTRE_FRANCE: L.LatLng = new L.LatLng(46.4606, 2.2557);
   private map!: L.Map;
   private departements: L.GeoJSON<any>[] = [];
-  private userMarker!: L.CircleMarker;
+  private cantons: L.GeoJSON<any>[] = []
+  private userMarker: L.CircleMarker | undefined;
   depToggled: boolean = true;
 
-  constructor(private departementsService : MapDepartementsService) { }
+  constructor(private departementsService : MapDepartementsService,
+              private cantonsService: MapCantonsService) { }
 
   ngAfterViewInit(): void {
     this.initMap();
@@ -56,7 +60,7 @@ export class MapComponent implements AfterViewInit {
   }
 
   fetchDepartementData(): void {
-     this.departementsService.getRegions().subscribe({
+     this.departementsService.getDepartement().subscribe({
       next : (departements: IMapDepartements) => { 
           departements.features.forEach((departement) => {
             let geoJSONComponent = L.geoJSON(departement.geometry).setStyle({
@@ -65,7 +69,7 @@ export class MapComponent implements AfterViewInit {
             })
             .on("mouseover", (event) => handleDepartementMouseOver(event))
             .on("mouseout", (event) => handleDepartementMouseOut(event))
-            .on("click", (event) => this.handleDepartementClick(event))
+            .on("click", (event) => this.handleDepartementClick(event, departement.properties))
             .addTo(this.map);
             // We store each element
             this.departements.push(geoJSONComponent);
@@ -76,6 +80,7 @@ export class MapComponent implements AfterViewInit {
   }
 
   showAllDepartements(): void {
+    this.hideAllCantons();
     this.depToggled = true;
     this.departements.forEach(departement => {
       departement.addTo(this.map);
@@ -91,33 +96,76 @@ export class MapComponent implements AfterViewInit {
     });
   }
 
-  handleDepartementClick(event: L.LeafletMouseEvent) {
-    this.hideDepartements(event.target);
-    this.map.fitBounds(event.target.getBounds());
+  hideAllCantons() {
+    this.cantons.forEach(canton => {
+        canton.remove();
+    });
   }
+
+  handleDepartementClick(event: L.LeafletMouseEvent, depData: any) {
+    this.hideDepartements();
+    this.map.fitBounds(event.target.getBounds());
+    event.target.fire("mouseout");
+    this.fetchCantonsData(depData);
+  }
+
+  fetchCantonsData(depData: any): void {
+    this.cantonsService.getCantons(depData.code, depData.nom).subscribe({
+     next : (cantons: IMapCantons) => { 
+         cantons.features.forEach((canton) => {
+           let geoJSONComponent = L.geoJSON(canton.geometry).setStyle({
+             color: DEPARTEMENT_DEFAULT_COLOR,
+             fillColor: DEPARTEMENT_DEFAULT_COLOR,
+           })
+           .on("mouseover", (event) => handleDepartementMouseOver(event))
+           .on("mouseout", (event) => handleDepartementMouseOut(event))
+           .on("click", (event) => this.handleCantonClick(event))
+           .addTo(this.map);
+           // We store each element
+           this.cantons.push(geoJSONComponent);
+         })
+     },
+     error : (err) => console.log(`[OOPSIES] - ${err}`)
+   });
+  }
+
+ handleCantonClick(event: L.LeafletMouseEvent) {
+  // this.hideDepartements();
+  this.map.fitBounds(event.target.getBounds());
+}
 
   handleResetClick(): void {
     this.map.setView(this.CENTRE_FRANCE, 6);
-    if(this.userMarker != null) this.userMarker.remove();
+    if(this.userMarker != undefined) {
+      this.userMarker.remove();
+      this.userMarker = undefined;
+    }
     this.showAllDepartements();
+    this.hideAllCantons();
   }
 
   handleUserPosClick() {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        let userPos = new L.LatLng(position.coords.latitude, position.coords.longitude);
-        this.map.setView(userPos, 18);
-        this.userMarker = L.circleMarker(userPos, {
-          weight: 8,
-          radius: 8,
-          color: "#0000FF",
-          opacity: 0.3,
-          fillColor: "#0000FF",
-          fillOpacity: 1
-        }).addTo(this.map);
-        this.hideDepartements();
-      },
-      (err) => console.log("User denied access to geolocation"));
+    if (this.userMarker == undefined) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          let userPos = new L.LatLng(position.coords.latitude, position.coords.longitude);
+          this.map.setView(userPos, 18);
+          this.userMarker = L.circleMarker(userPos, {
+            weight: 8,
+            radius: 8,
+            color: "#0000FF",
+            opacity: 0.3,
+            fillColor: "#0000FF",
+            fillOpacity: 1
+          }).addTo(this.map).bindPopup("Your position");
+          this.hideDepartements();
+        },
+        (err) => console.log("User denied access to geolocation"));
+    }
+    else {
+      this.hideDepartements();
+      this.map.setView(this.userMarker.getLatLng(), 18);
+    }
   }
 
   handleToggleDepPoly() {
