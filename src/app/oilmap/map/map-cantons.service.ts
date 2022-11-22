@@ -14,7 +14,6 @@ export class MapCantonsService {
 
     getCantons(code: string, nom: string) : Observable<IMapCantons> {
         let id = code + '-' + latinize(nom).toLowerCase().replace("'","-");
-        console.log(latinize(nom))
         let url = `${this.regionsUrl}${id}/arrondissements-${id}.geojson`
         return this.http.get<IMapCantons>(url).pipe(
             catchError(this.handleError)

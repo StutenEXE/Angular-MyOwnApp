@@ -4,6 +4,8 @@ import { MapDepartementsService } from './map-departement.service';
 import { IMapDepartements } from './map-departement.interface';
 import { MapCantonsService } from './map-cantons.service';
 import { IMapCantons } from './map-cantons.interface';
+import { MapOilService } from './map-stations.service';
+import { IMapOil } from './map-stations.interface';
 
 const DEPARTEMENT_DEFAULT_COLOR = "#0000FF";
 const DEPARTEMENT_HOVER_COLOR = "#FF0000";
@@ -19,12 +21,14 @@ export class MapComponent implements AfterViewInit {
   private CENTRE_FRANCE: L.LatLng = new L.LatLng(46.4606, 2.2557);
   private map!: L.Map;
   private departements: L.GeoJSON<any>[] = [];
-  private cantons: L.GeoJSON<any>[] = []
+  private cantons: L.GeoJSON<any>[] = [];
+  private oilStations: L.GeoJSON<any>[] = []
   private userMarker: L.CircleMarker | undefined;
   depToggled: boolean = true;
 
   constructor(private departementsService : MapDepartementsService,
-              private cantonsService: MapCantonsService) { }
+              private cantonsService: MapCantonsService,
+              private oilService: MapOilService) { }
 
   ngAfterViewInit(): void {
     this.initMap();
@@ -119,7 +123,7 @@ export class MapComponent implements AfterViewInit {
            })
            .on("mouseover", (event) => handleDepartementMouseOver(event))
            .on("mouseout", (event) => handleDepartementMouseOut(event))
-           .on("click", (event) => this.handleCantonClick(event))
+           .on("click", (event) => this.handleCantonClick(event, canton.properties.code.substring(0,2)))
            .addTo(this.map);
            // We store each element
            this.cantons.push(geoJSONComponent);
@@ -129,19 +133,55 @@ export class MapComponent implements AfterViewInit {
    });
   }
 
- handleCantonClick(event: L.LeafletMouseEvent) {
-  // this.hideDepartements();
-  this.map.fitBounds(event.target.getBounds());
-}
+  handleCantonClick(event: L.LeafletMouseEvent, depCode: string) {
+    this.hideAllCantons();
+    this.map.fitBounds(event.target.getBounds());
+    this.fetchOilData(depCode);
+  }
+
+  fetchOilData(depCode: string): void {
+    console.log("Tries to fetch");
+    this.oilService.getOil(depCode).subscribe({
+      next : (oilStations: IMapOil) => { 
+          oilStations.records.forEach((oilStation) => {
+            let geoJSONComponent = L.geoJSON(oilStation.geometry).setStyle({
+             color: DEPARTEMENT_DEFAULT_COLOR,
+             fillColor: DEPARTEMENT_DEFAULT_COLOR,
+           })
+           .on("click", (event) => this.handleOilMarkerClick(event, oilStation))
+           .addTo(this.map).bindPopup(`${oilStation.fields.ville.toUpperCase()}
+                                      <br>
+                                      <b>${oilStation.fields.prix_nom} : ${oilStation.fields.prix_valeur}€</b>`);
+           // We store each element
+           this.oilStations.push(geoJSONComponent);
+         })
+     },
+     error : (err) => console.log(`[OOPSIES] - ${err}`)
+   });
+  }
+
+  handleOilMarkerClick(event: L.LeafletMouseEvent, oilStation: any) {
+    console.log(oilStation.fields.ville)
+  }
 
   handleResetClick(): void {
     this.map.setView(this.CENTRE_FRANCE, 6);
+    this.removeUserMarker();
+    this.showAllDepartements();
+    this.hideAllCantons();
+  }
+
+  removeUserMarker() {
     if(this.userMarker != undefined) {
       this.userMarker.remove();
       this.userMarker = undefined;
     }
-    this.showAllDepartements();
-    this.hideAllCantons();
+  }
+
+  removeOilMarkers() {
+    this.oilStations.forEach(oilStation => {
+      oilStation.remove();
+    });
   }
 
   handleUserPosClick() {
@@ -178,6 +218,17 @@ export class MapComponent implements AfterViewInit {
     else {
       this.hideDepartements();
     }
+  }
+
+  handleHideElements() {
+    this.hideAllElements();
+  }
+
+  hideAllElements(): void {
+    this.hideDepartements();
+    this.hideAllCantons();
+    this.removeUserMarker();
+    this.removeOilMarkers();
   }
 }
 
