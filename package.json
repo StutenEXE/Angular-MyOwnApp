@@ -1,9 +1,13 @@
 {
   "name": "angular-my-own-app",
+  "engines": {
+    "node": "18",
+    "npm:": "6"
+  },
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --open",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
